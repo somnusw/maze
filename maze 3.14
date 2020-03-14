@@ -1,0 +1,90 @@
+import java.util.Scanner;
+/**
+ * 
+ * 
+ * @author wei
+ */
+public class Mate {
+	static int[][] maze;
+	/**迷宫的行数*/
+	static int n;
+	/**到达出口的最短路径（步长）*/
+	static int short_path;
+	
+	public static void main (String[] args) {
+		
+		Scanner sc=new Scanner(System.in);
+		n=sc.nextInt();
+		
+		short_path=n*n;
+		//方阵
+		maze=new int[n][n];
+		//输入的遍历
+		for (int i=0;i<n;i++) 
+		{
+			for (int j=0;j<n;j++) 
+			{
+				maze[i][j]=sc.nextInt();
+			}
+		}
+		//函数调用入口（1，1），初始步长为0
+		findBestpath(1,1,0);
+		
+		if(short_path==n*n)
+		{
+			//没有找到最佳路径
+			System.out.println("No solution");
+		}
+		else
+		{
+			System.out.println(short_path);
+		}
+	}
+	public static void findBestpath(int x,int y,int count) {
+		//到达迷宫的出口
+		int diff=2;
+		if(x==n-diff&&y==n-diff) 
+		{
+			short_path=Math.min(count,short_path);
+		}
+		
+		else 
+		{
+			//路径不能重复，走过之后置为1障碍物
+			maze[x][y]=1;
+			//System.out.println(x);
+			//System.out.println(y);
+			//System.out.println("haahahahah");
+			 //上
+			if( x>1 && maze[x-1][y]==0)            
+			{
+				findBestpath(x-1,y,count+1);
+			}
+			 //下
+			if( x<n-1 && maze[x+1][y]==0)         
+			{
+				findBestpath(x+1,y,count+1);
+			}
+			 //左
+			if(y>1 && maze[x][y-1]==0)           
+			{
+				findBestpath(x,y-1,count+1);
+			}
+			//右
+			if(y<n-1 && maze[x][y+1]==0)         
+			{
+				findBestpath(x,y+1,count+1);
+			}
+			//若在一个方向上没有找到那条出路就回溯将刚才走过的一条路恢复到原来的状态
+			maze[x][y]=0;
+			//if(maze[x][y]==0) {
+				//System.out.println(x);
+				//System.out.println(y);
+				//System.out.println("AAAAAAAAAAAAA");
+			//}
+			
+		}
+		
+	}
+
+}
